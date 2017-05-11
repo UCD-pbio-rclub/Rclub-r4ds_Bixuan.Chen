@@ -1,0 +1,160 @@
+---
+title: "R-club-May-10"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(nycflights13)
+library(tidyverse)
+```
+
+```{r}
+flights
+
+View(flights)
+```
+
+```{r}
+jan1 <- filter(flights, month == 1, day == 1)
+
+filter(flights, month == 11 | month == 12)
+filter(flights, month == 11 | 12)
+
+nov_dec <- filter(flights, month %in% c(11, 12))
+View(nov_dec)
+```
+
+```{r}
+df <- tibble(x = c(1, NA, 3))
+filter(df, x > 1)
+filter(df, is.na(x) | x > 1)
+```
+
+Q5.2.4
+```{r}
+#1.1
+filter(flights, arr_delay >= 120)
+
+#1.2
+filter(flights, dest == "IAH"|dest == "HOU")
+
+#1.3
+filter(flights, carrier == "UA"|carrier == "AA"|carrier == "DL")
+
+#1.4
+filter(flights, month %in% c(7,8,9))
+
+#1.5
+filter(flights, arr_delay >= 120 & !dep_delay > 0 )
+
+#1.6
+filter(flights, dep_delay >= 60 & dep_delay-arr_delay > 30)
+
+#1.7
+filter(flights, dep_time >= 0 | dep_time <= 600 & dep_time == 2400)
+```
+
+```{r}
+#2. 
+#1.4
+filter(flights, between(dep_time, 7, 9))
+#1.7
+filter(flights, between(dep_time, 0, 600))
+```
+
+```{r}
+#3. 
+nrow(filter(flights, is.na(flights$dep_time)))
+
+sum(is.na(flights$dep_time))
+
+# What other variables are missing? What might these rows represent?
+str(filter(flights, is.na(flights$dep_time)))
+```
+
+```{r}
+#4. 
+is.na(NA^0)
+NA^0
+
+is.na(NA|TRUE)
+NA|TRUE
+
+is.na(FALSE&NA)
+FALSE&NA
+
+is.na(NA*0)
+NA*0
+
+```
+
+Q5.3.1
+```{r}
+#1. 
+#()
+
+#2. 
+arrange(flights, desc(arr_delay))
+arrange(flights, desc(dep_time))
+
+#3. 
+arrange(flights, air_time)
+
+#4. 
+arrange(flights, desc(distance))
+```
+
+Q5.4.1
+```{r}
+#1. 
+select(flights, dep_time, dep_delay, arr_time, arr_delay)
+select(flights, starts_with("dep"), starts_with("arr"))
+
+#2. 
+select(flights, dep_time, dep_time)
+select(flights, dep_time)
+
+#3. 
+vars <- c("year", "month", "day", "dep_delay", "arr_delay")
+select(flights, one_of(vars))
+
+#4. 
+select(flights, contains("TIME"))
+
+```
+
+Q5.5.2
+```{r}
+#1. 
+select(flights, dep_time, sched_dep_time)
+
+transmute(flights, dep_time_new = dep_time %/% 100 * 60 + dep_time %% 100, sched_dep_time_new = sched_dep_time %/% 100 * 60 + sched_dep_time %% 100)
+
+#2. 
+transmute(flights, air_time, arr_time - dep_time)
+select(flights, air_time, arr_time, dep_time)
+
+transmute(flights, air_time, flights$arr_time %/% 100 * 60 + flights$arr_time %% 100 -
+            flights$dep_time %/% 100 * 60 + flights$dep_time %% 100)
+
+#3. 
+select(flights, dep_time, sched_dep_time, dep_delay)
+transmute(flights, sched_dep_time, dep_time %/% 100 * 60 + dep_time %% 100, sched_dep_time %/% 100 * 60 + sched_dep_time %% 100)
+
+transmute(flights, dep_delay, dep_time %/% 100 * 60 + dep_time %% 100 - 
+            sched_dep_time %/% 100 * 60 + sched_dep_time %% 100)
+
+#4. 
+# ()
+min_rank(desc(flights$arr_delay))
+
+#5. 
+1:3 + 1:10
+```
+
