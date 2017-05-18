@@ -43,6 +43,10 @@ delays <- flights %>%
 Q 5.6.7
 ```{r}
 #1. 
+not_cancelled <- flights %>% 
+  filter(!is.na(dep_delay), !is.na(arr_delay))
+
+
 
 #2. 
 not_cancelled <- flights %>% 
@@ -51,7 +55,6 @@ not_cancelled <- flights %>%
 not_cancelled %>%
   group_by(dest) %>%
   summarise(n())
-
 
 not_cancelled %>%
   group_by(tailnum) %>%
@@ -66,7 +69,8 @@ cancelled <- flights %>%
 
 cancelled %>%
   group_by(year, month, day) %>%
-  summarise(n()) 
+  summarise(flights = n(), 
+            ave_delay = mean(dep_delay, na.rm = TRUE)) 
 
 
 cancelled <- flights %>% 
@@ -118,7 +122,7 @@ flights %>%
 
 #3. 
   flights %>%
-  group_by(month, day) %>% 
+  group_by(dep_time) %>% 
   summarise(num_delay = sum(!is.na(arr_delay) & arr_delay > 0)) %>%
   arrange(desc(num_delay))
 
@@ -132,14 +136,18 @@ flights %>%
     summarise(prop_delay = mean(arr_delay > 0, na.rm = TRUE))
   
 #5. 
-  ?lag()
+lag(flights$dep_delay)
   
+
 #6. 
 
-#7. ???
+#7. 
  flights %>%
-     group_by(dest, carrier) %>%
-     count(carrier)
+     group_by(dest) %>%
+     count(carrier) %>%
+   summarise(num_carrier = n()) %>%
+   filter(num_carrier > 1) %>%
+   arrange()
 
 #8. 
 ```
