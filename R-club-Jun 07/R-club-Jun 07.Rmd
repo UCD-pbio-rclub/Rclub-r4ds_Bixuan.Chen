@@ -1,0 +1,113 @@
+---
+title: "R-club-Jun 07"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+
+read_csv("a,b,c
+1,2,3
+4,5,6")
+
+read_csv("The first line of metadata
+  The second line of metadata
+  x,y,z
+  1,2,3", skip = 2)
+
+read_csv("# A comment I want to skip
+  x,y,z
+  1,2,3", comment = "#")
+
+read_csv("1,2,3\n4,5,6", col_names = FALSE)
+
+read_csv("1,2,3\n4,5,6", col_names = c("x", "y", "z"))
+
+read_csv("a,b,c\n1,2,.", na = ".")
+
+
+```
+
+```{r}
+#11.2.2
+
+#Q.1
+#read.delim()
+
+#Q.2
+
+#Q.3
+#fwf_widths()?
+
+#Q.4
+read_delim("x,y\n1,'a,b'", delim = ",", quote = "'")
+
+#Q.5
+read_csv("a,b\n1,2,3\n4,5,6")
+#Only two columns but three valus for each row. 
+
+read_csv("a,b,c\n1,2\n1,2,3,4")
+#Numbers in each row are different
+
+read_csv("a,b\n1")
+
+read_csv("a,b\n1,2\na,b")
+
+read_delim("a;b\n1;3", delim = ";")
+```
+
+```{r}
+#11.3.5
+
+#Q.1
+#parse_double, parse_number, parse_character
+
+#Q.2
+parse_number("10,000", locale = locale(decimal_mark = ","))
+parse_number("10,000", locale = locale(grouping_mark = ","))
+
+parse_number("10,000", locale = locale(decimal_mark = ","))
+
+parse_number("10.00", locale = locale(grouping_mark = "."))
+
+#Q.3
+parse_date("10/11/01", locale = locale(date_format = "%m/%d/%y"))
+parse_time("10:11:01", locale = locale(time_format = "%H/%M/%S"))
+
+#Q.4
+
+#Q.5
+#read_csv() reads comma delimited files
+#read_csv2() reads semicolon separated files (when "," is used as the decimal place)
+
+#Q.6
+
+#Q.7
+d1 <- "January 1, 2010"
+parse_date(d1, "%B %d, %Y")
+
+d2 <- "2015-Mar-07"
+parse_date(d2, "%Y-%b-%d")
+
+d3 <- "06-Jun-2017"
+parse_date(d3, "%d-%b-%Y")
+
+d4 <- c("August 19 (2015)", "July 1 (2015)")
+parse_date(d4, "%B %d (%Y)", "%B %d (%Y)")
+
+d5 <- "12/30/14"
+parse_date(d5, "%m/%d/%y")
+
+t1 <- "1705"
+parse_time(t1, "%H%M")
+
+t2 <- "11:15:10.12 PM"
+parse_time(t2, "%I:%M:%OS %p")
+```
+
